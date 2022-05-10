@@ -28,7 +28,7 @@ macro(append_wholearchive_lib_if_found)
   foreach (_arg ${ARGN})
     find_library(${_arg}_LIBRARY ${_arg} PATHS "${TORCH_INSTALL_PREFIX}/lib")
     if(${_arg}_LIBRARY)
-      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+      if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND APPLE)
         list(APPEND TORCH_LIBRARIES "-Wl,-force_load,${${_arg}_LIBRARY}")
       elseif(MSVC)
         list(APPEND TORCH_LIBRARIES "-WHOLEARCHIVE:${${_arg}_LIBRARY}")
@@ -98,6 +98,14 @@ else()
 
   if(@USE_XNNPACK@)
     append_torchlib_if_found(XNNPACK)
+  endif()
+  
+  if(@USE_GLOO@)
+    append_torchlib_if_found(gloo)
+  endif()
+  
+  if(@USE_BREAKPAD)
+    append_torchlib_if_found(breakpad_common breakpad)
   endif()
 
   append_torchlib_if_found(caffe2_protos protobuf-lite protobuf protoc)
