@@ -104,7 +104,7 @@ else()
     append_torchlib_if_found(gloo)
   endif()
   
-  if(@USE_BREAKPAD)
+  if(@USE_BREAKPAD@)
     append_torchlib_if_found(breakpad_common breakpad)
   endif()
 
